@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
+    final PageController pageController = PageController();
 
     return Scaffold(
       body: Obx(() {
@@ -34,8 +35,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 40.0, left: 20.0, right: 20.0),
+                      padding: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -47,8 +47,7 @@ class HomeScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.surround_sound,
-                                  color: Colors.white),
+                              icon: Icon(Icons.surround_sound, color: Colors.white),
                               onPressed: () {},
                             ),
                           ),
@@ -71,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: PageView.builder(
-                        controller: PageController(),
+                        controller: pageController,
                         scrollDirection: Axis.vertical,
                         itemCount: homeController.quotesList.length,
                         itemBuilder: (context, index) {
@@ -122,57 +121,64 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade800,
-                              shape: BoxShape.circle,
+                      child: Obx(() {
+                        var currentPage = pageController.page?.round() ?? 0;
+                        var currentQuote = homeController.quotesList.isNotEmpty ? homeController.quotesList[currentPage] : null;
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade800,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(Icons.share, color: Colors.white),
+                                onPressed: () {
+                                  if (currentQuote != null) {
+                                    ShareExtend.share(currentQuote.quote, "text");
+                                  }
+                                },
+                              ),
                             ),
-                            child: IconButton(
-                              icon: Icon(Icons.share, color: Colors.white),
-                              onPressed: () {
-                                var currentPage = homeController.quotesList.isNotEmpty
-                                    ? PageController().page?.round() ?? 0
-                                    : null;
-                                if (currentPage != null) {
-                                  var currentQuote = homeController.quotesList[currentPage];
-                                  ShareExtend.share(currentQuote.quote, "text");
-                                }
-                              },
+                            SizedBox(width: 20),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade800,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  currentQuote?.liked == true ? Icons.favorite : Icons.favorite_border,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  if (currentQuote != null) {
+                                    homeController.likeQuote(currentPage);
+                                  }
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 20),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade800,
-                              shape: BoxShape.circle,
+                            SizedBox(width: 20),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade800,
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(Icons.text_fields, color: Colors.white),
+                                onPressed: () {},
+                              ),
                             ),
-                            child: IconButton(
-                              icon: Icon(Icons.favorite_border, color: Colors.white),
-                              onPressed: () {},
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade800,
-                              shape: BoxShape.circle,
-                            ),
-                            child: IconButton(
-                              icon: Icon(Icons.text_fields, color: Colors.white),
-                              onPressed: () {},
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        );
+                      }),
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.only(

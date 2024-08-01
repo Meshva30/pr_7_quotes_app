@@ -1,76 +1,62 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
 import '../model/quotes_model.dart';
 
-class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._init();
-  static Database? _database;
+class DBHelper {
+  static Database? _db;
 
-  DatabaseHelper._init();
-
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDB('quotes.db');
-    return _database!;
+  Future<Database> get db async {
+    if (_db != null) return _db!;
+    _db = await initDb();
+    return _db!;
   }
 
-  Future<Database> _initDB(String filePath) async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, filePath);
-
-    return await openDatabase(path, version: 1, onCreate: _createDB);
-  }
-
-  Future<void> _createDB(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE quotes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        quote TEXT,
-        author TEXT,
-        category TEXT
-      )
-    ''');
-    print("Table created");
-
-    await db.execute('''
-      CREATE TABLE liked_quotes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        quote_id INTEGER,
-        FOREIGN KEY (quote_id) REFERENCES quotes (id)
-      )
-    ''');
-    print("Additional table created");
-  }
-
-  Future<void> addCategoryColumn() async {
-    final db = await database;
-
-    var result = await db.rawQuery(" table_info(quotes)");
-    bool columnExists = result.any((column) => column['name'] == 'category');
-
-    if (!columnExists) {
-      await db.execute('''
-        ALTER TABLE quotes
-        ADD COLUMN category TEXT
-      ''');
-      print("Category column added");
-    }
+  initDb() async {
+    String path = join(await getDatabasesPath(), 'quotes.db');
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE quotes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            quote TEXT,
+            author TEXT,
+            liked INTEGER,
+            category TEXT
+          )
+        ''');
+      },
+    );
   }
 
   Future<void> insertQuote(Quote quote) async {
-    final db = await database;
-    await db.insert(
+    final dbClient = await db;
+    await dbClient.insert(
       'quotes',
       quote.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print("Quote inserted: ${quote.toMap()}");
   }
 
-  Future<List<Quote>> fetchQuotes() async {
-    final db = await database;
-    final result = await db.query('quotes');
-    print("Fetched quotes: $result");
-    return result.map((json) => Quote.fromMap(json)).toList();
+  Future<void> updateQuote(Quote quote) async {
+    final dbClient = await db;
+    await dbClient.update(
+      'quotes',
+      quote.toMap(),
+      where: 'quote = ? AND author = ?',
+      whereArgs: [quote.quote, quote.author],
+    );
+  }
+
+  Future<List<Quote>> getLikedQuotes() async {
+    final dbClient = await db;
+    final List<Map<String, dynamic>> maps =
+    await dbClient.query('quotes', where: 'liked = ?', whereArgs: [1]);
+
+    return List.generate(maps.length, (i) {
+      return Quote.fromMap(maps[i]);
+    });
   }
 }

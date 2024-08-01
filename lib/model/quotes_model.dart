@@ -1,33 +1,31 @@
 class Quote {
-  // final int id;
   final String quote;
   final String author;
+  bool liked;
   final String category;
 
   Quote({
-    // required this.id,
     required this.quote,
     required this.author,
+    this.liked = false,
     required this.category,
   });
 
+  factory Quote.fromMap(Map<String, dynamic> map) {
+    return Quote(
+      quote: map['quote'],
+      author: map['author'],
+      liked: map['liked'] ?? false,
+      category: map['category'],
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
-      // 'id': id,
       'quote': quote,
       'author': author,
+      'liked': liked ? 1 : 0,
       'category': category,
     };
-  }
-
-  // Convert a Map to a Quote
-  factory Quote.fromMap(Map<String, dynamic> map) {
-    return Quote(
-      // id: map['id'],
-      quote: map['quote'],
-      author: map['author'],
-      category: map['category'],
-    );
   }
 }
