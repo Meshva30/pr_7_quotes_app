@@ -57,12 +57,10 @@ class QuotesController extends GetxController {
     selectedQuotes.add(quote);
     isSelectionMode.value = selectedQuotes.isNotEmpty;
   }
-
   void removeFromSelection(Quote quote) {
     selectedQuotes.remove(quote);
     isSelectionMode.value = selectedQuotes.isNotEmpty;
   }
-
   void toggleSelectionMode() {
     isSelectionMode.value = !isSelectionMode.value;
     if (!isSelectionMode.value) {
