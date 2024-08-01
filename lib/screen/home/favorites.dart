@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:pr_7_quotes_app/screen/home/showquotes.dart';
 
 import '../../controller/quotes_controller.dart';
 import '../../model/quotes_model.dart';
+
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -31,18 +32,53 @@ class FavoriteScreen extends StatelessWidget {
           categorizedQuotes[quote.category]!.add(quote);
         }
 
-        return ListView(
-          children: categorizedQuotes.entries.map((entry) {
-            return ExpansionTile(
-              title: Text(entry.key),
-              children: entry.value.map((quote) {
-                return ListTile(
-                  title: Text(quote.quote),
-                  subtitle: Text('- ${quote.author}'),
+        return GridView.builder(
+          padding: EdgeInsets.all(10),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 1.5,
+          ),
+          itemCount: categorizedQuotes.keys.length,
+          itemBuilder: (context, index) {
+            String category = categorizedQuotes.keys.elementAt(index);
+            List<Quote> quotes = categorizedQuotes[category]!;
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryDetailScreen(
+                      category: category,
+                      quotes: quotes,
+                    ),
+                  ),
                 );
-              }).toList(),
+              },
+              child: Card(
+                color: Colors.green.shade100,
+                elevation: 4,
+                child: Column(
+
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
             );
-          }).toList(),
+          },
         );
       }),
     );

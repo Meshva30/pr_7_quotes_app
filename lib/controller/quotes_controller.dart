@@ -1,17 +1,17 @@
-
+import 'dart:math'; // Importing Random
 import 'package:get/get.dart';  // Importing GetX
-  // Importing the DBHelper
-import 'dart:developer';
+import 'dart:developer'; // Importing the log function
 
 import '../helper/api_helper.dart';
 import '../helper/db_helper.dart';
-import '../model/quotes_model.dart';  // Importing the log function
+import '../model/quotes_model.dart';
 
 class HomeController extends GetxController {
   var quotesList = <Quote>[].obs;
   var isLoading = true.obs;
   var selectedBackground = 'assets/img/theme/img.jpeg'.obs;
   var likedQuotesList = <Quote>[].obs;
+  var currentQuoteIndex = 0.obs; // Observable for the current quote index
 
   @override
   void onInit() {
@@ -24,9 +24,9 @@ class HomeController extends GetxController {
     List<dynamic>? jsonData = await ApiServices().apiCalling();
     if (jsonData != null) {
       quotesList.value = jsonData.map((data) => Quote.fromMap(data)).toList();
-      log('--- Fetched Data ---');
+      // log('--- Fetched Data ---');
     } else {
-      log('--- Null Data ---');
+      // log('--- Null Data ---');
     }
     isLoading(false);
   }
@@ -46,11 +46,16 @@ class HomeController extends GetxController {
       likedQuotesList.remove(quote);
     }
 
-    // Update the database
-    DBHelper().updateQuote(quote);
+
   }
 
   Future<void> fetchLikedQuotes() async {
     likedQuotesList.value = await DBHelper().getLikedQuotes();
+  }
+
+  void randomizeQuotes() {
+    final random = Random();
+    quotesList.shuffle(); // Shuffle the list
+    currentQuoteIndex.value = random.nextInt(quotesList.length); // Pick a random index
   }
 }

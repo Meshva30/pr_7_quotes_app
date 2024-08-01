@@ -40,16 +40,6 @@ class DBHelper {
     );
   }
 
-  Future<void> updateQuote(Quote quote) async {
-    final dbClient = await db;
-    await dbClient.update(
-      'quotes',
-      quote.toMap(),
-      where: 'quote = ? AND author = ?',
-      whereArgs: [quote.quote, quote.author],
-    );
-  }
-
   Future<List<Quote>> getLikedQuotes() async {
     final dbClient = await db;
     final List<Map<String, dynamic>> maps =

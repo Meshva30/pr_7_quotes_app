@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pr_7_quotes_app/screen/home/Categoriesscreen.dart';
 import 'package:pr_7_quotes_app/screen/home/favorites.dart';
+
 import 'package:pr_7_quotes_app/screen/home/homescreen.dart';
 import 'package:pr_7_quotes_app/screen/home/theme.dart';
 
@@ -21,10 +22,10 @@ class MyApp extends StatelessWidget {
           name: '/categories',
           page: () => CategoriesScreen(),
         ),
-        // GetPage(
-        //   name: '/favorites',
-        //   page: () => FavoritesScreen(),
-        // ),
+        GetPage(
+          name: '/favorites',
+          page: () => FavoriteScreen(),
+        ),
         GetPage(
           name: '/background',
           page: () => BackgroundSelectionScreen(),

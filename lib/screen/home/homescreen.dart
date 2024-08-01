@@ -135,34 +135,39 @@ class HomeScreen extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: IconButton(
-                                icon: Icon(Icons.share, color: Colors.white),
+                                icon: Icon(Icons.shuffle, color: Colors.white),
                                 onPressed: () {
-                                  if (currentQuote != null) {
-                                    ShareExtend.share(currentQuote.quote, "text");
-                                  }
+                                  homeController.randomizeQuotes();
+                                  pageController.jumpToPage(homeController.currentQuoteIndex.value);
                                 },
                               ),
                             ),
                             SizedBox(width: 20),
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade800,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  currentQuote?.liked == true ? Icons.favorite : Icons.favorite_border,
-                                  color: Colors.white,
+                            Obx(() {
+                              var currentPage = pageController.page?.round() ?? 0;
+                              var currentQuote = homeController.quotesList.isNotEmpty ? homeController.quotesList[currentPage] : null;
+                              bool liked = currentQuote?.liked ?? false;
+
+                              return Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade800,
+                                  shape: BoxShape.circle,
                                 ),
-                                onPressed: () {
-                                  if (currentQuote != null) {
-                                    homeController.likeQuote(currentPage);
-                                  }
-                                },
-                              ),
-                            ),
+                                child: IconButton(
+                                  icon: Icon(
+                                    liked ? Icons.favorite : Icons.favorite_border,
+                                    color: liked ? Colors.red : Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    if (currentQuote != null) {
+                                      homeController.likeQuote(currentPage);
+                                    }
+                                  },
+                                ),
+                              );
+                            }),
                             SizedBox(width: 20),
                             Container(
                               height: 50,

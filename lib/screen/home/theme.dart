@@ -38,7 +38,7 @@ class BackgroundSelectionScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                homeController.setBackground(imglist[index]);
+                homeController.selectedBackground(imglist[index]);
                 Get.back();
               },
               child: Container(
