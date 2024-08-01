@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:share_extend/share_extend.dart';
 
 import '../../controller/quotes_controller.dart';
+import '../../controller/theme_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
     final PageController pageController = PageController();
+    final ThemeController themeController = Get.put(ThemeController());
 
     return Scaffold(
       body: Obx(() {
@@ -23,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         return Stack(
           children: [
             Obx(
-                  () => Container(
+              () => Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -35,7 +37,8 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0),
+                      padding: const EdgeInsets.only(
+                          top: 40.0, left: 20.0, right: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -47,8 +50,10 @@ class HomeScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.surround_sound, color: Colors.white),
-                              onPressed: () {},
+                              icon: Icon(Icons.light_mode, color: Colors.white),
+                              onPressed: () {
+                                themeController.toggleTheme();
+                              },
                             ),
                           ),
                           Container(
@@ -76,7 +81,8 @@ class HomeScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           var quote = homeController.quotesList[index];
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -96,6 +102,9 @@ class HomeScreen extends StatelessWidget {
                                       ],
                                     ),
                                     textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 30,
                                   ),
                                   Text(
                                     '- ${quote.author}',
@@ -123,7 +132,9 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: Obx(() {
                         var currentPage = pageController.page?.round() ?? 0;
-                        var currentQuote = homeController.quotesList.isNotEmpty ? homeController.quotesList[currentPage] : null;
+                        var currentQuote = homeController.quotesList.isNotEmpty
+                            ? homeController.quotesList[currentPage]
+                            : null;
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -135,17 +146,22 @@ class HomeScreen extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: IconButton(
-                                icon: Icon(Icons.shuffle, color: Colors.white),
+                                icon: Icon(Icons.share, color: Colors.white),
                                 onPressed: () {
                                   homeController.randomizeQuotes();
-                                  pageController.jumpToPage(homeController.currentQuoteIndex.value);
+                                  pageController.jumpToPage(
+                                      homeController.currentQuoteIndex.value);
                                 },
                               ),
                             ),
                             SizedBox(width: 20),
                             Obx(() {
-                              var currentPage = pageController.page?.round() ?? 0;
-                              var currentQuote = homeController.quotesList.isNotEmpty ? homeController.quotesList[currentPage] : null;
+                              var currentPage =
+                                  pageController.page?.round() ?? 0;
+                              var currentQuote =
+                                  homeController.quotesList.isNotEmpty
+                                      ? homeController.quotesList[currentPage]
+                                      : null;
                               bool liked = currentQuote?.liked ?? false;
 
                               return Container(
@@ -157,7 +173,9 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 child: IconButton(
                                   icon: Icon(
-                                    liked ? Icons.favorite : Icons.favorite_border,
+                                    liked
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
                                     color: liked ? Colors.red : Colors.white,
                                   ),
                                   onPressed: () {
@@ -177,7 +195,8 @@ class HomeScreen extends StatelessWidget {
                                 shape: BoxShape.circle,
                               ),
                               child: IconButton(
-                                icon: Icon(Icons.text_fields, color: Colors.white),
+                                icon: Icon(Icons.text_fields,
+                                    color: Colors.white),
                                 onPressed: () {},
                               ),
                             ),

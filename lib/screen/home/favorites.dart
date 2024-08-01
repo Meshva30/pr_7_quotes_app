@@ -68,8 +68,9 @@ class FavoriteScreen extends StatelessWidget {
                       child: Text(
                         category,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black
                         ),
                       ),
                     ),

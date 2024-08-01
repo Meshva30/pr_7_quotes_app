@@ -20,10 +20,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         elevation: 0,
         title: const Text(
           'Categories',
-          style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close,),
           onPressed: () {
             Navigator.pop(context); // Navigate back
           },
@@ -35,7 +34,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             },
             child: const Text(
               'Unlock All',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(),
             ),
           ),
         ],
@@ -54,7 +53,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey[200],
+
               ),
             ),
             const SizedBox(height: 16),
@@ -280,7 +279,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       selectedItems[index] = !selectedItems[index];
     });
 
-    // Navigate to home screen with the selected category index
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -329,7 +328,7 @@ class CategoryItem extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w500,color: Colors.black),
             ),
           ],
         ),
