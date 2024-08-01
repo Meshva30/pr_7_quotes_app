@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
           name: '/categories',
           page: () => CategoriesScreen(),
         ),
-        GetPage(
-          name: '/favorites',
-          page: () => FavoritesScreen(),
-        ),
+        // GetPage(
+        //   name: '/favorites',
+        //   page: () => FavoritesScreen(),
+        // ),
         GetPage(
           name: '/background',
           page: () => BackgroundSelectionScreen(),

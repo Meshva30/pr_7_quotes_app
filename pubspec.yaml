@@ -39,7 +39,6 @@ dependencies:
   http: any
   sqflite: any
   path: any
-  path_provider: any
   share_extend: any
 
 

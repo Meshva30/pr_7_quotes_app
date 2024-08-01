@@ -1,19 +1,13 @@
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import '../helper/db_helper.dart';
+import 'dart:developer';
+
+import '../helper/api_helper.dart';
 import '../model/quotes_model.dart';
 
-class QuotesController extends GetxController {
-  final RxList<Quote> quotes = <Quote>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxBool isSelectionMode = false.obs;
-  final RxSet<Quote> selectedQuotes = <Quote>{}.obs;
-  final PageController pageController = PageController();
-
-  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
-
-  RxString selectedBackground = 'assets/img/theme/img.jpeg'.obs;
-  RxInt currentPage = 0.obs;
+class HomeController extends GetxController {
+  var quotesList = <Quote>[].obs;
+  var isLoading = true.obs;
+  var selectedBackground = 'assets/img/theme/img.jpeg'.obs; // Default background image
 
   @override
   void onInit() {
@@ -21,54 +15,19 @@ class QuotesController extends GetxController {
     fetchQuotes();
   }
 
-  @override
-  void onClose() {
-    pageController.dispose();
-    super.onClose();
-  }
-
   Future<void> fetchQuotes() async {
-    isLoading.value = true;
-    try {
-      quotes.value = await _dbHelper.fetchQuotes();
-    } finally {
-      isLoading.value = false;
+    isLoading(true);
+    List<dynamic>? jsonData = await ApiServices().apiCalling();
+    if (jsonData != null) {
+      quotesList.value = jsonData.map((data) => Quote.fromMap(data)).toList();
+      log('--- Fetched Data ---');
+    } else {
+      log('--- Null Data ---');
     }
+    isLoading(false);
   }
 
-  Future<void> likeQuote(Quote quote) async {
-    quote.liked = !quote.liked;
-    await _dbHelper.updateQuote(quote);
-    quotes.refresh();
-  }
-
-  Future<void> likeSelectedQuotes() async {
-    List<Quote> updatedQuotes = [];
-    for (var quote in selectedQuotes) {
-      quote.liked = true;
-      updatedQuotes.add(quote);
-    }
-    await _dbHelper.updateQuotes(updatedQuotes);
-    selectedQuotes.clear();
-    quotes.refresh();
-  }
-
-  void addToSelection(Quote quote) {
-    selectedQuotes.add(quote);
-    isSelectionMode.value = selectedQuotes.isNotEmpty;
-  }
-  void removeFromSelection(Quote quote) {
-    selectedQuotes.remove(quote);
-    isSelectionMode.value = selectedQuotes.isNotEmpty;
-  }
-  void toggleSelectionMode() {
-    isSelectionMode.value = !isSelectionMode.value;
-    if (!isSelectionMode.value) {
-      selectedQuotes.clear();
-    }
-  }
-
-  void setSelectedBackground(String backgroundPath) {
-    selectedBackground.value = backgroundPath;
+  void setBackground(String path) {
+    selectedBackground.value = path;
   }
 }

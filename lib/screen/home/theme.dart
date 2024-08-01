@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pr_7_quotes_app/controller/quotes_controller.dart';
+import '../../controller/quotes_controller.dart';
+
 
 class BackgroundSelectionScreen extends StatelessWidget {
-  final QuotesController wallpaperController = Get.put(QuotesController());
+  final HomeController homeController = Get.put(HomeController());
   final List<String> imglist = [
     'assets/img/theme/img1.jpeg',
     'assets/img/theme/img2.jpeg',
@@ -25,32 +26,30 @@ class BackgroundSelectionScreen extends StatelessWidget {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            itemCount: imglist.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  wallpaperController.selectedBackground(imglist[index]);
-                  Get.back();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(imglist[index]))),
-                ),
-              );
-            },
+        child: GridView.builder(
+          padding: const EdgeInsets.all(10),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
           ),
+          itemCount: imglist.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                homeController.setBackground(imglist[index]);
+                Get.back();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(imglist[index]))),
+              ),
+            );
+          },
         ),
       ),
     );
