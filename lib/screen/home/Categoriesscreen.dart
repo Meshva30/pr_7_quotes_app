@@ -1,24 +1,39 @@
 import 'package:flutter/material.dart';
 
-class CategoriesScreen extends StatelessWidget {
+import 'homescreen.dart';
+
+class CategoriesScreen extends StatefulWidget {
+  const CategoriesScreen({super.key});
+
+  @override
+  _CategoriesScreenState createState() => _CategoriesScreenState();
+}
+
+class _CategoriesScreenState extends State<CategoriesScreen> {
+  List<bool> selectedItems = List<bool>.filled(18, false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Categories',
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
-          icon: Icon(Icons.close, color: Colors.black),
-          onPressed: () {},
+          icon: const Icon(Icons.close, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back
+          },
         ),
         actions: [
           TextButton(
-            onPressed: () {},
-            child: Text(
+            onPressed: () {
+              // Handle unlock all action
+            },
+            child: const Text(
               'Unlock All',
               style: TextStyle(color: Colors.black),
             ),
@@ -32,7 +47,7 @@ class CategoriesScreen extends StatelessWidget {
           children: [
             TextField(
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 hintText: 'Search',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -42,7 +57,7 @@ class CategoriesScreen extends StatelessWidget {
                 fillColor: Colors.grey[200],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -52,122 +67,171 @@ class CategoriesScreen extends StatelessWidget {
                       title: 'General',
                       items: [
                         CategoryItem(
-                          icon: Icons.circle,
-                          label: 'General',
+                          icon: Icons.favorite,
+                          label: 'Love',
                           color: Colors.green.shade100,
+                          isSelected: selectedItems[0],
+                          onTap: () => _handleItemTap(0),
                         ),
                         CategoryItem(
-                          icon: Icons.favorite,
-                          label: 'Your Favorites',
+                          icon: Icons.ac_unit,
+                          label: 'Affirmation',
                           color: Colors.green.shade100,
+                          isSelected: selectedItems[1],
+                          onTap: () => _handleItemTap(1),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildCategorySection(
                       title: 'Find Moments of Inner Peace',
                       items: [
                         CategoryItem(
-                          icon: Icons.nightlight_round,
-                          label: 'Find Restful Sleep',
+                          icon: Icons.motion_photos_off,
+                          label: 'Motivation',
                           color: Colors.blue.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[2],
+                          onTap: () => _handleItemTap(2),
                         ),
                         CategoryItem(
                           icon: Icons.spa,
-                          label: 'Achieve Calmness',
+                          label: 'Positive',
                           color: Colors.blue.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[3],
+                          onTap: () => _handleItemTap(3),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildCategorySection(
                       title: 'Dive Deep into Your Thoughts',
                       items: [
                         CategoryItem(
-                          icon: Icons.lightbulb_outline,
-                          label: 'Inspiring Questions',
+                          icon: Icons.ac_unit,
+                          label: 'Mental Health',
                           color: Colors.purple.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[4],
+                          onTap: () => _handleItemTap(4),
                         ),
                         CategoryItem(
-                          icon: Icons.mic,
-                          label: 'Confronting Beliefs',
+                          icon: Icons.line_axis_outlined,
+                          label: 'Discipline',
                           color: Colors.purple.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[5],
+                          onTap: () => _handleItemTap(5),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildCategorySection(
                       title: 'Cultivate Daily Gratitude',
                       items: [
                         CategoryItem(
-                          icon: Icons.fitness_center,
-                          label: 'Expressing Gratitude',
+                          icon: Icons.heart_broken_rounded,
+                          label: 'Broken',
                           color: Colors.green.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[6],
+                          onTap: () => _handleItemTap(6),
                         ),
                         CategoryItem(
-                          icon: Icons.ac_unit,
-                          label: 'Cultivate Gratitude',
+                          icon: Icons.self_improvement,
+                          label: 'Self Esteem',
                           color: Colors.green.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[7],
+                          onTap: () => _handleItemTap(7),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildCategorySection(
                       title: 'Fuel Your Inner Flame',
                       items: [
                         CategoryItem(
-                          icon: Icons.handshake,
-                          label: 'Find Strength in Faith',
+                          icon: Icons.supervised_user_circle,
+                          label: 'Success',
                           color: Colors.blue.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[8],
+                          onTap: () => _handleItemTap(8),
                         ),
                         CategoryItem(
-                          icon: Icons.yard_outlined,
-                          label: 'Connect Spiritually',
+                          icon: Icons.handshake_outlined,
+                          label: 'Friendship',
                           color: Colors.blue.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[9],
+                          onTap: () => _handleItemTap(9),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildCategorySection(
                       title: 'Ignite Your Ambitions',
                       items: [
                         CategoryItem(
-                          icon: Icons.sunny,
-                          label: 'Embrace Fresh Starts',
+                          icon: Icons.loyalty,
+                          label: 'Loyalty',
                           color: Colors.purple.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[10],
+                          onTap: () => _handleItemTap(10),
                         ),
                         CategoryItem(
-                          icon: Icons.gps_off,
-                          label: 'Set Meaningful Goals',
+                          icon: Icons.emoji_emotions_outlined,
+                          label: 'Kindness',
                           color: Colors.purple.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[11],
+                          onTap: () => _handleItemTap(11),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildCategorySection(
                       title: 'Overcome Relationship Challenges',
                       items: [
                         CategoryItem(
-                          icon: Icons.handshake_outlined,
-                          label: 'Visuailze Parenthood',
+                          icon: Icons.emoji_emotions,
+                          label: 'Funny',
                           color: Colors.green.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[12],
+                          onTap: () => _handleItemTap(12),
                         ),
                         CategoryItem(
-                          icon: Icons.join_inner,
-                          label: 'Nurture Your Partnership',
+                          icon: Icons.emoji_emotions_rounded,
+                          label: 'Happy',
                           color: Colors.green.shade100,
                           isLocked: true,
+                          isSelected: selectedItems[13],
+                          onTap: () => _handleItemTap(13),
+                        ),
+                      ],
+                    ),
+                    _buildCategorySection(
+                      title: 'Overcome Relationship Challenges',
+                      items: [
+                        CategoryItem(
+                          icon: Icons.sentiment_dissatisfied_rounded,
+                          label: 'Sed',
+                          color: Colors.green.shade100,
+                          isLocked: true,
+                          isSelected: selectedItems[12],
+                          onTap: () => _handleItemTap(12),
+                        ),
+                        CategoryItem(
+                          icon: Icons.emoji_emotions,
+                          label: 'Ego',
+                          color: Colors.green.shade100,
+                          isLocked: true,
+                          isSelected: selectedItems[13],
+                          onTap: () => _handleItemTap(13),
                         ),
                       ],
                     ),
@@ -181,24 +245,26 @@ class CategoriesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategorySection(
-      {required String title, required List<CategoryItem> items}) {
+  Widget _buildCategorySection({
+    required String title,
+    required List<CategoryItem> items,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         GridView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 3 / 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 3 / 2.5,
           ),
           itemCount: items.length,
           itemBuilder: (context, index) {
@@ -208,6 +274,20 @@ class CategoriesScreen extends StatelessWidget {
       ],
     );
   }
+
+  void _handleItemTap(int index) {
+    setState(() {
+      selectedItems[index] = !selectedItems[index];
+    });
+
+    // Navigate to home screen with the selected category index
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(selectedCategoryIndex: index),
+      ),
+    );
+  }
 }
 
 class CategoryItem extends StatelessWidget {
@@ -215,33 +295,44 @@ class CategoryItem extends StatelessWidget {
   final String label;
   final Color color;
   final bool isLocked;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  const CategoryItem({
+  const CategoryItem({super.key,
     required this.icon,
     required this.label,
     required this.color,
     this.isLocked = false,
+    this.isSelected = false,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 55, color: Colors.black),
-          SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+    return GestureDetector(
+      onTap: isLocked ? null : onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.orangeAccent : color,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Colors.orange : Colors.transparent,
+            width: 2,
           ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 55, color: Colors.black),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }

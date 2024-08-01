@@ -1,6 +1,6 @@
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../model/quotes_model.dart';
 
 class DatabaseHelper {
@@ -28,7 +28,8 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         quote TEXT,
         author TEXT,
-        category TEXT
+        category TEXT,
+        liked INTEGER DEFAULT 0
       )
     ''');
   }
@@ -36,7 +37,6 @@ class DatabaseHelper {
   Future<void> addCategoryColumn() async {
     final db = await database;
 
-    // Check if the column already exists
     var result = await db.rawQuery("PRAGMA table_info(quotes)");
     bool columnExists = result.any((column) => column['name'] == 'category');
 
@@ -50,12 +50,37 @@ class DatabaseHelper {
 
   Future<void> insertQuote(Quote quote) async {
     final db = await database;
-
     await db.insert(
       'quotes',
       quote.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<void> updateQuote(Quote quote) async {
+    final db = await database;
+    await db.update(
+      'quotes',
+      quote.toMap(),
+      where: 'id = ?',
+      whereArgs: [quote.id],
+    );
+  }
+
+  Future<void> updateQuotes(List<Quote> quotes) async {
+    final db = await database;
+    Batch batch = db.batch();
+
+    for (var quote in quotes) {
+      batch.update(
+        'quotes',
+        quote.toMap(),
+        where: 'id = ?',
+        whereArgs: [quote.id],
+      );
+    }
+
+    await batch.commit();
   }
 
   Future<List<Quote>> fetchQuotes() async {
@@ -67,5 +92,15 @@ class DatabaseHelper {
   Future<void> deleteAllQuotes() async {
     final db = await database;
     await db.delete('quotes');
+  }
+
+  Future<List<Quote>> fetchLikedQuotes() async {
+    final db = await database;
+    final result = await db.query(
+      'quotes',
+      where: 'liked = ?',
+      whereArgs: [1],
+    );
+    return result.map((json) => Quote.fromMap(json)).toList();
   }
 }

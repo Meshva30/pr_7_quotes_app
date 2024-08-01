@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:pr_7_quotes_app/screen/home/Categoriesscreen.dart';
+import 'package:pr_7_quotes_app/screen/home/favorites.dart';
 import 'package:pr_7_quotes_app/screen/home/homescreen.dart';
+import 'package:pr_7_quotes_app/screen/home/theme.dart';
 
-import 'helper/db_helper.dart';
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper.instance.addCategoryColumn(); // Ensure this is called to update the schema
+void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => HomeScreen()),
+        GetPage(
+          name: '/categories',
+          page: () => CategoriesScreen(),
+        ),
+        GetPage(
+          name: '/favorites',
+          page: () => FavoritesScreen(),
+        ),
+        GetPage(
+          name: '/background',
+          page: () => BackgroundSelectionScreen(),
+        ),
+      ],
     );
   }
 }
