@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'intro2.dart';
 
 class Intro1 extends StatefulWidget {
@@ -9,6 +11,7 @@ class Intro1 extends StatefulWidget {
 class _Intro1State extends State<Intro1> with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   Animation<double>? _opacityAnimation;
+  Animation<Offset>? _slideAnimation;
 
   @override
   void initState() {
@@ -22,8 +25,12 @@ class _Intro1State extends State<Intro1> with SingleTickerProviderStateMixin {
       CurvedAnimation(parent: _controller!, curve: Curves.easeIn),
     );
 
-    // Start the animation after a delay
-    Future.delayed(Duration(milliseconds: 500), () {
+    _slideAnimation =
+        Tween<Offset>(begin: Offset(0, 0.1), end: Offset.zero).animate(
+      CurvedAnimation(parent: _controller!, curve: Curves.easeInOut),
+    );
+
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         _controller!.forward();
       }
@@ -42,48 +49,50 @@ class _Intro1State extends State<Intro1> with SingleTickerProviderStateMixin {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/img/theme/bg2.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Content
           Padding(
-            padding: const EdgeInsets.only(top: 70),
+            padding: const EdgeInsets.only(top: 30),
             child: Column(
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 FadeTransition(
                   opacity: _opacityAnimation!,
-                  child: Container(
-                    height: 250,
-                    width: 250,
-                    child: Image.asset(
-                      'assets/img/theme/dove.png',
-                      fit: BoxFit.cover,
+                  child: SlideTransition(
+                    position: _slideAnimation!,
+                    child: Container(
+                      height: 300,
+                      width: 250,
+                      child: Image.asset(
+                        'assets/img/theme/dove.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 150),
+                const SizedBox(height: 90),
                 FadeTransition(
                   opacity: _opacityAnimation!,
-                  child: Text(
+                  child: const Text(
                     'Soar to New Heights',
                     style: TextStyle(
                       fontSize: 30,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 FadeTransition(
                   opacity: _opacityAnimation!,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       'Unlock your drive with ‘Motivate Me’ - your daily catalyst for personal triumph.\n\nJoin the Movement early, get ready to be inspired.',
                       style: TextStyle(
@@ -94,22 +103,24 @@ class _Intro1State extends State<Intro1> with SingleTickerProviderStateMixin {
                     ),
                   ),
                 ),
-                SizedBox(height: 100),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Intro2(),
-                    ));
-                  },
-                  child: Text(
-                    'Get Started',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade700, // Background color
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    textStyle: TextStyle(
-                      fontSize: 16,
+                const SizedBox(height: 50),
+                Container(
+                  width: 330,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(Intro2());
+                    },
+                    child: const Text(
+                      'Get Started',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade700, // Background color
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

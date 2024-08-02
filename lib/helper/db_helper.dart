@@ -20,7 +20,7 @@ class DBHelper {
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE quotes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                     
             quote TEXT,
             author TEXT,
             liked INTEGER,
@@ -31,12 +31,21 @@ class DBHelper {
     );
   }
 
-  Future<void> insertQuote(Quote quote) async {
+  Future<void> insertLikedQuote(Quote quote) async {
     final dbClient = await db;
     await dbClient.insert(
       'quotes',
       quote.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> deleteLikedQuote(Quote quote) async {
+    final dbClient = await db;
+    await dbClient.delete(
+      'quotes',
+      where: 'quote = ? AND author = ?',
+      whereArgs: [quote.quote, quote.author],
     );
   }
 

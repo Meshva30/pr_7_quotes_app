@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'homescreen.dart';
+import '../homescreen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});

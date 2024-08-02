@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:share_extend/share_extend.dart';
+import 'package:pr_7_quotes_app/controller/quotes_controller.dart';
+import 'package:pr_7_quotes_app/controller/theme_controller.dart';
 
-import '../../controller/quotes_controller.dart';
-import '../../controller/theme_controller.dart';
+import '../../helper/db_helper.dart';
+
+class BottomNavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  BottomNavItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: Colors.white),
+          const SizedBox(height: 5),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,7 +47,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (homeController.isLoading.value) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -46,14 +76,20 @@ class HomeScreen extends StatelessWidget {
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade800,
+                              color: Color(0xff2F2F2F),
                               shape: BoxShape.circle,
                             ),
-                            child: IconButton(
-                              icon: Icon(Icons.light_mode, color: Colors.white),
-                              onPressed: () {
-                                themeController.toggleTheme();
-                              },
+                            child: Obx(
+                              () => IconButton(
+                                icon: Icon(
+                                    themeController.isDarkTheme.value
+                                        ? Icons.dark_mode
+                                        : Icons.light_mode,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  themeController.toggleTheme();
+                                },
+                              ),
                             ),
                           ),
                           Container(
@@ -64,7 +100,8 @@ class HomeScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.person, color: Colors.white),
+                              icon:
+                                  const Icon(Icons.person, color: Colors.white),
                               onPressed: () {
                                 Get.toNamed('/profile');
                               },
@@ -89,7 +126,7 @@ class HomeScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     quote.quote,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
@@ -103,12 +140,10 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
+                                  const SizedBox(height: 30),
                                   Text(
                                     '- ${quote.author}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       color: Colors.white70,
                                       shadows: [
@@ -130,88 +165,83 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Obx(() {
-                        var currentPage = pageController.page?.round() ?? 0;
-                        var currentQuote = homeController.quotesList.isNotEmpty
-                            ? homeController.quotesList[currentPage]
-                            : null;
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade800,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: Icon(Icons.share, color: Colors.white),
-                                onPressed: () {
-                                  homeController.randomizeQuotes();
-                                  pageController.jumpToPage(
-                                      homeController.currentQuoteIndex.value);
-                                },
-                              ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Color(0xff2F2F2F),
+                              shape: BoxShape.circle,
                             ),
-                            SizedBox(width: 20),
-                            Obx(() {
-                              var currentPage =
-                                  pageController.page?.round() ?? 0;
-                              var currentQuote =
-                                  homeController.quotesList.isNotEmpty
-                                      ? homeController.quotesList[currentPage]
-                                      : null;
-                              bool liked = currentQuote?.liked ?? false;
-
-                              return Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade800,
-                                  shape: BoxShape.circle,
+                            child: IconButton(
+                              icon:
+                                  const Icon(Icons.share, color: Colors.white),
+                              onPressed: () {
+                                // homeController.randomizeQuotes();
+                                // pageController.jumpToPage(
+                                //     homeController.currentQuoteIndex.value);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Color(0xff2F2F2F),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Obx(() {
+                              final currentIndex = homeController.quotesList
+                                  .indexWhere((quote) =>
+                                      quote.category ==
+                                      homeController.currentcategory.value);
+                              final quote =
+                                  homeController.quotesList[currentIndex];
+                              var isLiked = quote.liked;
+                              return IconButton(
+                                icon: Icon(
+                                  isLiked
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isLiked ? Colors.red : Colors.white,
                                 ),
-                                child: IconButton(
-                                  icon: Icon(
-                                    liked
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: liked ? Colors.red : Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    if (currentQuote != null) {
-                                      homeController.likeQuote(currentPage);
-                                    }
-                                  },
-                                ),
+                                onPressed: () {
+                                  homeController.likeQuote(currentIndex);
+                                  final updatedQuote =
+                                      homeController.quotesList[currentIndex];
+                                  DBHelper().insertLikedQuote(updatedQuote);
+                                },
                               );
                             }),
-                            SizedBox(width: 20),
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade800,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: Icon(Icons.text_fields,
-                                    color: Colors.white),
-                                onPressed: () {},
-                              ),
+                          ),
+                          const SizedBox(width: 20),
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Color(0xff2F2F2F),
+                              shape: BoxShape.circle,
                             ),
-                          ],
-                        );
-                      }),
+                            child: IconButton(
+                              icon: const Icon(Icons.text_fields,
+                                  color: Colors.white),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(15),
                         topRight: Radius.circular(15),
                       ),
                       child: Container(
                         color: Color(0xff2F2F2F),
-                        padding: EdgeInsets.symmetric(vertical: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -222,7 +252,7 @@ class HomeScreen extends StatelessWidget {
                                 Get.toNamed('/favorites');
                               },
                             ),
-                            VerticalDivider(
+                            const VerticalDivider(
                               color: Colors.white,
                               thickness: 1,
                               width: 20,
@@ -234,7 +264,7 @@ class HomeScreen extends StatelessWidget {
                                 Get.toNamed('/categories');
                               },
                             ),
-                            VerticalDivider(
+                            const VerticalDivider(
                               color: Colors.white,
                               thickness: 1,
                               width: 20,
@@ -246,7 +276,7 @@ class HomeScreen extends StatelessWidget {
                                 Get.toNamed('/background');
                               },
                             ),
-                            VerticalDivider(
+                            const VerticalDivider(
                               color: Colors.white,
                               thickness: 1,
                               width: 20,
@@ -269,36 +299,6 @@ class HomeScreen extends StatelessWidget {
           ],
         );
       }),
-    );
-  }
-}
-
-class BottomNavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  BottomNavItem({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white),
-          SizedBox(height: 5),
-          Text(
-            label,
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
     );
   }
 }

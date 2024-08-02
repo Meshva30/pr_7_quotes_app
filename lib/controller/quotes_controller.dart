@@ -1,7 +1,5 @@
-import 'dart:math'; // Importing Random
-import 'package:get/get.dart';  // Importing GetX
-import 'dart:developer'; // Importing the log function
-
+import 'dart:math';
+import 'package:get/get.dart';
 import '../helper/api_helper.dart';
 import '../helper/db_helper.dart';
 import '../model/quotes_model.dart';
@@ -11,31 +9,53 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   var selectedBackground = 'assets/img/theme/img.jpeg'.obs;
   var likedQuotesList = <Quote>[].obs;
-  var currentQuoteIndex = 0.obs; // Observable for the current quote index
+  var categoryQuotesList=<Quote>[].obs;
+  var currentQuoteIndex = 0.obs;
+  var currentcategory =''.obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchQuotes();
+    fetchLikedQuotes();
   }
 
   Future<void> fetchQuotes() async {
     isLoading(true);
     List<dynamic>? jsonData = await ApiServices().apiCalling();
     if (jsonData != null) {
-      quotesList.value = jsonData.map((data) => Quote.fromMap(data)).toList();
-      // log('--- Fetched Data ---');
-    } else {
-      // log('--- Null Data ---');
+      var fetchQuotes = quotesList.value = jsonData.map((data) => Quote.fromMap(data)).toList();
+      fetchQuotes.shuffle(Random());
+      quotesList.value=fetchQuotes;
+      if(quotesList.isEmpty)
+        {
+          currentcategory.value=quotesList.first.category;
+        }
     }
     isLoading(false);
+  }
+
+  Future<void> fetchLikedQuotes() async {
+    likedQuotesList.value = await DBHelper().getLikedQuotes();
   }
 
   void setBackground(String path) {
     selectedBackground.value = path;
   }
 
-  void likeQuote(int index) {
+  // void likeQuote(int index) async {
+  //   var quote = quotesList[index];
+  //   quote.liked = !quote.liked;
+  //   quotesList[index] = quote;
+  //
+  //   if (quote.liked) {
+  //     likedQuotesList.add(quote);
+  //   } else {
+  //     likedQuotesList.remove(quote);
+  //   }
+  // }
+
+  void likeQuote(int index) async {
     var quote = quotesList[index];
     quote.liked = !quote.liked;
     quotesList[index] = quote;
@@ -45,17 +65,8 @@ class HomeController extends GetxController {
     } else {
       likedQuotesList.remove(quote);
     }
-
-
   }
 
-  Future<void> fetchLikedQuotes() async {
-    likedQuotesList.value = await DBHelper().getLikedQuotes();
-  }
 
-  void randomizeQuotes() {
-    final random = Random();
-    quotesList.shuffle(); // Shuffle the list
-    currentQuoteIndex.value = random.nextInt(quotesList.length); // Pick a random index
-  }
+
 }

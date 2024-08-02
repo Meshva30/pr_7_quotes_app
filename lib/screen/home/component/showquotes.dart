@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../model/quotes_model.dart';
+import 'package:get/get.dart';
+import '../../../controller/quotes_controller.dart';
+import '../../../helper/db_helper.dart';
+import '../../../model/quotes_model.dart';
 
-class CategoryDetailScreen extends StatelessWidget {
+class Showquotes extends StatelessWidget {
   final String category;
   final List<Quote> quotes;
+  final HomeController homeController = Get.find();
 
-  const CategoryDetailScreen({
+  Showquotes({
     required this.category,
     required this.quotes,
     super.key,
@@ -26,6 +30,7 @@ class CategoryDetailScreen extends StatelessWidget {
             child: ListTile(
               title: Text(quote.quote),
               subtitle: Text('- ${quote.author}'),
+
             ),
           );
         }).toList(),

@@ -7,7 +7,7 @@ class Quote {
   Quote({
     required this.quote,
     required this.author,
-    this.liked = false,
+    required this.liked,
     required this.category,
   });
 
@@ -15,7 +15,7 @@ class Quote {
     return Quote(
       quote: map['quote'],
       author: map['author'],
-      liked: map['liked'] ?? false,
+      liked: map['liked'] == 1,
       category: map['category'],
     );
   }

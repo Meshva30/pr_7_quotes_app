@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pr_7_quotes_app/screen/home/showquotes.dart';
-
-import '../../controller/quotes_controller.dart';
-import '../../model/quotes_model.dart';
+import 'package:pr_7_quotes_app/screen/home/component/showquotes.dart';
+import '../../../controller/quotes_controller.dart';
+import '../../../model/quotes_model.dart';
 
 
 class FavoriteScreen extends StatelessWidget {
@@ -49,7 +48,7 @@ class FavoriteScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CategoryDetailScreen(
+                    builder: (context) => Showquotes(
                       category: category,
                       quotes: quotes,
                     ),
@@ -60,7 +59,6 @@ class FavoriteScreen extends StatelessWidget {
                 color: Colors.green.shade100,
                 elevation: 4,
                 child: Column(
-
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -70,11 +68,10 @@ class FavoriteScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black
+                          color: Colors.black,
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),

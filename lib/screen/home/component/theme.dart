@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controller/quotes_controller.dart';
+import '../../../controller/quotes_controller.dart';
 
 
 class BackgroundSelectionScreen extends StatelessWidget {
