@@ -36,7 +36,7 @@ class Showquotes extends StatelessWidget {
                 icon: Icon(Icons.delete, color: Colors.red),
                 onPressed: () async {
                   await DBHelper().deleteLikedQuote(quote);
-                  homeController.likedQuotesList.remove(quote); // Remove from list
+                  homeController.likedQuotesList.remove(quote);
                 },
               ),
             ),

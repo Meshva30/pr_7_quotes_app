@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import '../helper/api_helper.dart';
 import '../helper/db_helper.dart';
 import '../model/quotes_model.dart';
@@ -10,7 +11,7 @@ class HomeController extends GetxController {
   var selectedBackground = 'assets/img/theme/img.jpeg'.obs;
   var likedQuotesList = <Quote>[].obs;
   var categoryQuotesList=<Quote>[].obs;
-  var currentQuoteIndex = 0.obs;
+  RxInt currentQuoteIndex = 0.obs;
   var currentcategory =''.obs;
 
   @override
@@ -44,20 +45,6 @@ class HomeController extends GetxController {
   }
 
 
-
-  // void likeQuote(int index) async {
-  //   var quote = quotesList[index];
-  //   quote.liked = !quote.liked;
-  //   quotesList[index] = quote;
-  //
-  //   if (quote.liked) {
-  //     likedQuotesList.add(quote);
-  //   } else {
-  //     likedQuotesList.remove(quote);
-  //   }
-  // }
-
-
   void likeQuote(int index) async {
     var quote = quotesList[index];
     quote.liked = !quote.liked;
@@ -65,11 +52,12 @@ class HomeController extends GetxController {
 
     if (quote.liked) {
       likedQuotesList.add(quote);
-      await DBHelper().insertLikedQuote(quote); // Save to DB
+      await DBHelper().insertLikedQuote(quote);
     } else {
       likedQuotesList.remove(quote);
-      await DBHelper().deleteLikedQuote(quote); // Remove from DB
+      await DBHelper().deleteLikedQuote(quote);
     }
+    likedQuotesList.refresh();
   }
 
 
