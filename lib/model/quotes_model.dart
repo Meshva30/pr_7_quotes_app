@@ -15,7 +15,7 @@ class Quote {
     return Quote(
       quote: map['quote'],
       author: map['author'],
-      liked: map['liked'] == 1,
+      liked: map['liked'] == 0,
       category: map['category'],
     );
   }

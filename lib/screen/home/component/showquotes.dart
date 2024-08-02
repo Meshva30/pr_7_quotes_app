@@ -30,7 +30,17 @@ class Showquotes extends StatelessWidget {
             child: ListTile(
               title: Text(quote.quote),
               subtitle: Text('- ${quote.author}'),
+              trailing: IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: () async {
 
+                  await DBHelper()..deleteLikedQuote(quote);
+
+                  homeController.quotesList.remove(quote);
+
+                  homeController.update();
+                },
+              ),
             ),
           );
         }).toList(),

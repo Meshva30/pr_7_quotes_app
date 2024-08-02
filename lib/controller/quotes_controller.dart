@@ -43,17 +43,7 @@ class HomeController extends GetxController {
     selectedBackground.value = path;
   }
 
-  // void likeQuote(int index) async {
-  //   var quote = quotesList[index];
-  //   quote.liked = !quote.liked;
-  //   quotesList[index] = quote;
-  //
-  //   if (quote.liked) {
-  //     likedQuotesList.add(quote);
-  //   } else {
-  //     likedQuotesList.remove(quote);
-  //   }
-  // }
+
 
   void likeQuote(int index) async {
     var quote = quotesList[index];
