@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
 import '../../../controller/quotes_controller.dart';
 import '../../../helper/db_helper.dart';
 import '../../../model/quotes_model.dart';
@@ -7,7 +9,7 @@ import '../../../model/quotes_model.dart';
 class Showquotes extends StatelessWidget {
   final String category;
   final List<Quote> quotes;
-  final HomeController homeController = Get.find();
+  final HomeController homeController = Get.put(HomeController());
 
   Showquotes({
     required this.category,
@@ -33,12 +35,8 @@ class Showquotes extends StatelessWidget {
               trailing: IconButton(
                 icon: Icon(Icons.delete, color: Colors.red),
                 onPressed: () async {
-
-                  await DBHelper()..deleteLikedQuote(quote);
-
-                  homeController.quotesList.remove(quote);
-
-                  homeController.update();
+                  await DBHelper().deleteLikedQuote(quote);
+                  homeController.likedQuotesList.remove(quote); // Remove from list
                 },
               ),
             ),

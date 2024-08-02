@@ -45,6 +45,19 @@ class HomeController extends GetxController {
 
 
 
+  // void likeQuote(int index) async {
+  //   var quote = quotesList[index];
+  //   quote.liked = !quote.liked;
+  //   quotesList[index] = quote;
+  //
+  //   if (quote.liked) {
+  //     likedQuotesList.add(quote);
+  //   } else {
+  //     likedQuotesList.remove(quote);
+  //   }
+  // }
+
+
   void likeQuote(int index) async {
     var quote = quotesList[index];
     quote.liked = !quote.liked;
@@ -52,8 +65,10 @@ class HomeController extends GetxController {
 
     if (quote.liked) {
       likedQuotesList.add(quote);
+      await DBHelper().insertLikedQuote(quote); // Save to DB
     } else {
       likedQuotesList.remove(quote);
+      await DBHelper().deleteLikedQuote(quote); // Remove from DB
     }
   }
 

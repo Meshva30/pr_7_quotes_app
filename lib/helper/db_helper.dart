@@ -58,4 +58,5 @@ class DBHelper {
       return Quote.fromMap(maps[i]);
     });
   }
+
 }
