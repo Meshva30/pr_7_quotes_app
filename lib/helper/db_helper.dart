@@ -11,6 +11,7 @@ class DBHelper {
     return _db!;
   }
 
+
   Future<Database> initDb() async {
     String path = join(await getDatabasesPath(), 'quotes.db');
     return await openDatabase(
