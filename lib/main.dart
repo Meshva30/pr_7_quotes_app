@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: themeController.theme,
-        initialRoute: '/',
+        initialRoute: '/splash',
         getPages: [
           GetPage(name: '/splash', page: () => const splashscreen()),
           GetPage(name: '/intro1', page: () => Intro1()),

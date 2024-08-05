@@ -24,19 +24,20 @@ class Showquotes extends StatelessWidget {
         title: Text(category),
       ),
       body: ListView(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         children: quotes.map((quote) {
           return Card(
             elevation: 4,
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             child: ListTile(
               title: Text(quote.quote),
               subtitle: Text('- ${quote.author}'),
               trailing: IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
+                icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: () async {
                   await DBHelper().deleteLikedQuote(quote);
                   homeController.likedQuotesList.remove(quote);
+                  Get.back();
                 },
               ),
             ),

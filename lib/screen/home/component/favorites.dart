@@ -14,11 +14,11 @@ class FavoriteScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Favorites'),
+        title: const Text('Your Favorites'),
       ),
       body: Obx(() {
         if (homeController.likedQuotesList.isEmpty) {
-          return Center(
+          return const Center(
             child: Text('No favorite quotes found.'),
           );
         }
@@ -32,8 +32,8 @@ class FavoriteScreen extends StatelessWidget {
         }
 
         return GridView.builder(
-          padding: EdgeInsets.all(10),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          padding: const EdgeInsets.all(10),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
@@ -56,7 +56,7 @@ class FavoriteScreen extends StatelessWidget {
                 );
               },
               child: Card(
-                color: Colors.green.shade100,
+                color: Colors.blue.shade100,
                 elevation: 4,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,8 +65,8 @@ class FavoriteScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         category,
-                        style: TextStyle(
-                          fontSize: 25,
+                        style: const TextStyle(
+                          fontSize: 21,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),

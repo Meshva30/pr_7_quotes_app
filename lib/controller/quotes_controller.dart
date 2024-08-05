@@ -1,6 +1,7 @@
+
+
 import 'dart:math';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import '../helper/api_helper.dart';
 import '../helper/db_helper.dart';
 import '../model/quotes_model.dart';
@@ -10,9 +11,9 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   var selectedBackground = 'assets/img/theme/img.jpeg'.obs;
   var likedQuotesList = <Quote>[].obs;
-  var categoryQuotesList=<Quote>[].obs;
+  var categoryQuotesList = <Quote>[].obs;
   RxInt currentQuoteIndex = 0.obs;
-  var currentcategory =''.obs;
+  var currentCategory = ''.obs;
 
   @override
   void onInit() {
@@ -25,13 +26,13 @@ class HomeController extends GetxController {
     isLoading(true);
     List<dynamic>? jsonData = await ApiServices().apiCalling();
     if (jsonData != null) {
-      var fetchQuotes = quotesList.value = jsonData.map((data) => Quote.fromMap(data)).toList();
-      fetchQuotes.shuffle(Random());
-      quotesList.value=fetchQuotes;
-      if(quotesList.isEmpty)
-        {
-          currentcategory.value=quotesList.first.category;
-        }
+      var fetchedQuotes = jsonData.map((data) => Quote.fromMap(data)).toList();
+      fetchedQuotes.shuffle(Random());
+      quotesList.value = fetchedQuotes;
+
+      if (quotesList.isNotEmpty) {
+        currentCategory.value = quotesList.first.category;
+      }
     }
     isLoading(false);
   }
@@ -44,22 +45,29 @@ class HomeController extends GetxController {
     selectedBackground.value = path;
   }
 
-
   void likeQuote(int index) async {
     var quote = quotesList[index];
-    quote.liked = !quote.liked;
+    bool isLiked = quote.liked;
+
+
+    quote.liked = !isLiked;
     quotesList[index] = quote;
 
     if (quote.liked) {
-      likedQuotesList.add(quote);
+      if (!likedQuotesList.contains(quote)) {
+        likedQuotesList.add(quote);
+        print("=========add=============== ${likedQuotesList.length}");
+      }
       await DBHelper().insertLikedQuote(quote);
     } else {
-      likedQuotesList.remove(quote);
+      if (likedQuotesList.contains(quote)) {
+        likedQuotesList.remove(quote);
+        print("============remove============ ${likedQuotesList.length}");
+      }
       await DBHelper().deleteLikedQuote(quote);
     }
-    likedQuotesList.refresh();
+
+
   }
-
-
-
 }
+

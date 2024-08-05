@@ -41,25 +41,15 @@ class _Intro2State extends State<Intro2> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff156F99),
       body: Stack(
         children: [
-          // Background image covering the entire screen
-          SizedBox.expand(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/img/theme/bg2.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          // Content over the background image
+
           Padding(
-            padding: const EdgeInsets.all(16.0), // Adjust padding as needed
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                const SizedBox(height: 100), // Adjust top position as needed
+                const SizedBox(height: 100),
                 FadeTransition(
                   opacity: _opacityAnimation!,
                   child: const Text(
@@ -80,23 +70,23 @@ class _Intro2State extends State<Intro2> with SingleTickerProviderStateMixin {
                       'Discover Personalized content based on your unique goals and aspirations.',
                       style: TextStyle(
                         fontSize: 20,
-                        color: Colors.black, // Change color for contrast
+                        color: Colors.black,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
                 const SizedBox(height: 50),
-                // Rows of buttons with spacing
-                _buildButtonRow('Self Care', 'Self Care'),
+
+                _buildButtonRow('Self Care', 'Personal Growth'),
                 const SizedBox(height: 10),
-                _buildButtonRow('Self Care', 'Self Care'),
+                _buildButtonRow('Stress and Anxiety', 'Body Positivity'),
                 const SizedBox(height: 10),
-                _buildButtonRow('Self Care', 'Self Care'),
+                _buildButtonRow('Positive Thinking', 'Relationships'),
                 const SizedBox(height: 10),
-                _buildButtonRow('Self Care', 'Self Care'),
+                _buildButtonRow('Happiness', 'Gratitude'),
                 const Spacer(),
-                // Pushes the following content (the button) to the bottom
+
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -134,28 +124,28 @@ class _Intro2State extends State<Intro2> with SingleTickerProviderStateMixin {
         Expanded(
           child: Container(
             height: 50,
-            margin: const EdgeInsets.only(right: 10), // Add spacing between buttons
+            margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.black, width: 1.5)),
             child: Center(
                 child: Text(
                   label1,
-                  style: const TextStyle(color: Colors.black, fontSize: 20),
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
                 )),
           ),
         ),
         Expanded(
           child: Container(
             height: 50,
-            margin: const EdgeInsets.only(left: 10), // Add spacing between buttons
+            margin: const EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.black, width: 1.5)),
             child: Center(
                 child: Text(
                   label2,
-                  style: const TextStyle(color: Colors.black, fontSize: 20),
+                  style: const TextStyle(color: Colors.black, fontSize: 15),
                 )),
           ),
         ),

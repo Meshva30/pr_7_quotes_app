@@ -46,16 +46,10 @@ class _Intro1State extends State<Intro1> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff156F99),
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/img/theme/bg2.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+
           Padding(
             padding: const EdgeInsets.only(top: 30),
             child: Column(
