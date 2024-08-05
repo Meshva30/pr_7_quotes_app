@@ -16,7 +16,7 @@ class DBHelper {
     String path = join(await getDatabasesPath(), 'quotes.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 1,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE quotes (
@@ -28,15 +28,9 @@ class DBHelper {
           )
         ''');
       },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 1) {
-          await db.execute('''
-            ALTER TABLE quotes ADD COLUMN newColumnName TEXT
-          ''');
-        }
-      },
     );
   }
+
 
   Future<void> insertLikedQuote(Quote quote) async {
     try {
