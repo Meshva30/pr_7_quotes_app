@@ -1,6 +1,3 @@
-
-
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/quotes_model.dart';
@@ -18,7 +15,7 @@ class DBHelper {
     String path = join(await getDatabasesPath(), 'quotes.db');
     return await openDatabase(
       path,
-      version: 2, // Increment the version number
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE quotes (
@@ -32,7 +29,6 @@ class DBHelper {
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 1) {
-          // Add the new column
           await db.execute('''
             ALTER TABLE quotes ADD COLUMN newColumnName TEXT
           ''');
@@ -49,9 +45,7 @@ class DBHelper {
         quote.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   Future<void> deleteLikedQuote(Quote quote) async {
@@ -62,9 +56,7 @@ class DBHelper {
         where: 'quote = ? AND author = ?',
         whereArgs: [quote.quote, quote.author],
       );
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   Future<List<Quote>> getLikedQuotes() async {
@@ -80,9 +72,7 @@ class DBHelper {
         return Quote.fromMap(maps[i]);
       });
     } catch (e) {
-
       return [];
     }
   }
 }
-
